@@ -222,10 +222,10 @@ export async function runFilesInContext(
   }
 
   let result: Result
-  
-  // FIXME: Clean up state management so that the `parseError` function is pure.
-  //        This is not a huge priority, but it would be good not to make use of
-  //        global state.
+
+    // FIXME: Clean up state management so that the `parseError` function is pure.
+    //        This is not a huge priority, but it would be good not to make use of
+    //        global state.
   ;({ result, verboseErrors } = await sourceFilesRunner(
     p => Promise.resolve(files[p]),
     entrypointFilePath,

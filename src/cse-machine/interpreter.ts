@@ -437,7 +437,7 @@ export function* generateCSEMachineStateStream(
       cmdEvaluators[command.instrType](command, context, control, stash, isPrelude)
     } else {
       // this is a scheme value
-      throw new Error("scheme removed")
+      throw new Error('scheme removed')
     }
 
     // Push undefined into the stack if both control and stash is empty
@@ -1048,9 +1048,9 @@ const cmdEvaluators: { [type: string]: CmdEvaluator } = {
       // as schemers like using the REPL, and that always assumes that the environment is reset
       // to the main environment.
       if (
-        (next &&
-          !(isInstr(next) && next.instrType === InstrType.ENVIRONMENT) &&
-          !control.canAvoidEnvInstr())
+        next &&
+        !(isInstr(next) && next.instrType === InstrType.ENVIRONMENT) &&
+        !control.canAvoidEnvInstr()
       ) {
         control.push(
           instr.envInstr(currentEnvironment(context), currentTransformers(context), command.srcNode)

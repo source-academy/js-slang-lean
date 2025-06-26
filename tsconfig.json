@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "es2020",
     "target": "es2020",
     "lib": [
       "es2021.string",
