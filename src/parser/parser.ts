@@ -1,10 +1,9 @@
 import type { Program } from 'estree'
 
 import type { Context } from '..'
-import { Chapter, Variant } from '../types'
+import { Chapter } from '../types'
 import { FullJSParser } from './fullJS'
 import { SourceParser } from './source'
-import { SourceTypedParser } from './source/typed'
 import type { AcornOptions, Parser } from './types'
 
 export function parse<TOptions extends AcornOptions>(
@@ -20,9 +19,6 @@ export function parse<TOptions extends AcornOptions>(
       break
     default:
       switch (context.variant) {
-        case Variant.TYPED:
-          parser = new SourceTypedParser(context.chapter, context.variant)
-          break
         default:
           parser = new SourceParser(context.chapter, context.variant)
       }
