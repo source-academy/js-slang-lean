@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
+    "module": "ESNext",
     "target": "es2020",
     "lib": [
       "es2021.string",
@@ -24,7 +23,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "resolveJsonModule": true,
     "noUnusedLocals": true,
-    "incremental": true,
   },
   "exclude": [
     "src/stdlib/metacircular-interpreter",
