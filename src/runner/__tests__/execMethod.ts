@@ -110,12 +110,7 @@ const sourceCases: TestCase[] = [
 
 // These JS cases never evaluate a prelude,
 // nor ever have verbose errors enabled
-const fullJSCases: Chapter[] = [Chapter.FULL_JS, Chapter.FULL_TS]
-
-// These alt langs never evaluate a prelude,
-// always use fullJS regardless of variant,
-// but we don't need to check for verbose errors
-const altLangCases: [Chapter, RunnerTypes][] = [[Chapter.PYTHON_1, 'fulljs']]
+const fullJSCases: Chapter[] = [Chapter.FULL_JS]
 
 type TestObject = {
   code: string
@@ -296,23 +291,6 @@ describe('Ensure that the correct runner is used for the given evaluation contex
 
       return [fullCase, verboseErrorCase, ...variantCases]
     })
-  )
-
-  testCases(
-    'Test alt-langs',
-    altLangCases.flatMap(([chapter, expectedRunner]) =>
-      objectValues(Variant).map(
-        (variant): TestCase => ({
-          code: '',
-          variant,
-          chapter,
-          expectedPrelude: false,
-          expectedRunner,
-          verboseErrors: false,
-          expectedValidate: false
-        })
-      )
-    )
   )
 
   test('if optionMethod is specified, verbose errors is ignored', () =>

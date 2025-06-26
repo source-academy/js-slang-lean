@@ -12,7 +12,6 @@ import { EnvTree } from './createContext'
 import Heap from './cse-machine/heap'
 import { Control, Stash, Transformers } from './cse-machine/interpreter'
 import type { ModuleFunctions } from './modules/moduleTypes'
-import { Representation } from './alt-langs/mapper'
 
 /**
  * Defines functions that act as built-ins, but might rely on
@@ -63,20 +62,6 @@ export enum Chapter {
   SOURCE_3 = 3,
   SOURCE_4 = 4,
   FULL_JS = -1,
-  HTML = -2,
-  FULL_TS = -3,
-  PYTHON_1 = -4,
-  PYTHON_2 = -5,
-  PYTHON_3 = -6,
-  PYTHON_4 = -7,
-  FULL_PYTHON = -8,
-  SCHEME_1 = -9,
-  SCHEME_2 = -10,
-  SCHEME_3 = -11,
-  SCHEME_4 = -12,
-  FULL_SCHEME = -13,
-  FULL_C = -14,
-  FULL_JAVA = -15,
   LIBRARY_PARSER = 100
 }
 
@@ -265,10 +250,6 @@ export interface Finished {
   status: 'finished'
   context: Context
   value: Value
-  representation?: Representation // if the returned value needs a unique representation,
-  // (for example if the language used is not JS),
-  // the display of the result will use the representation
-  // field instead
 }
 
 export interface SuspendedCseEval {

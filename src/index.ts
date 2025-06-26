@@ -8,7 +8,6 @@ import { looseParse, parseWithComments } from './parser/utils'
 import { getAllOccurrencesInScopeHelper, getScopeHelper } from './scope-refactoring'
 import { setBreakpointAtLine } from './stdlib/inspector'
 import {
-  Chapter,
   type Context,
   type Error as ResultError,
   type ExecutionMethod,
@@ -22,15 +21,13 @@ import {
 } from './types'
 import { assemble } from './vm/svml-assembler'
 import { compileToIns } from './vm/svml-compiler'
-export { SourceDocumentation } from './editors/ace/docTooltip'
 
 import { CSEResultPromise, resumeEvaluate } from './cse-machine/interpreter'
-import { ModuleNotFoundError } from './modules/errors'
 import type { ImportOptions } from './modules/moduleTypes'
 import preprocessFileImports from './modules/preprocessor'
 import { validateFilePath } from './modules/preprocessor/filePaths'
 import { getKeywords, getProgramNames, type NameDeclaration } from './name-extractor'
-import { htmlRunner, resolvedErrorPromise, sourceFilesRunner } from './runner'
+import { resolvedErrorPromise, sourceFilesRunner } from './runner'
 
 export interface IOptions {
   steps: number
@@ -225,27 +222,19 @@ export async function runFilesInContext(
   }
 
   let result: Result
-  if (context.chapter === Chapter.HTML) {
-    const code = files[entrypointFilePath]
-    if (code === undefined) {
-      context.errors.push(new ModuleNotFoundError(entrypointFilePath))
-      return resolvedErrorPromise
+  
+  // FIXME: Clean up state management so that the `parseError` function is pure.
+  //        This is not a huge priority, but it would be good not to make use of
+  //        global state.
+  ;({ result, verboseErrors } = await sourceFilesRunner(
+    p => Promise.resolve(files[p]),
+    entrypointFilePath,
+    context,
+    {
+      ...options,
+      shouldAddFileName: options.shouldAddFileName ?? Object.keys(files).length > 1
     }
-    result = await htmlRunner(code, context, options)
-  } else {
-    // FIXME: Clean up state management so that the `parseError` function is pure.
-    //        This is not a huge priority, but it would be good not to make use of
-    //        global state.
-    ;({ result, verboseErrors } = await sourceFilesRunner(
-      p => Promise.resolve(files[p]),
-      entrypointFilePath,
-      context,
-      {
-        ...options,
-        shouldAddFileName: options.shouldAddFileName ?? Object.keys(files).length > 1
-      }
-    ))
-  }
+  ))
 
   return result
 }

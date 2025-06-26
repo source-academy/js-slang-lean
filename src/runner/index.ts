@@ -1,7 +1,6 @@
 import * as _ from 'lodash'
 import type { Program } from 'estree'
 import type { Context, IOptions, Result } from '..'
-import { mapResult } from '../alt-langs/mapper'
 import type { FileGetter } from '../modules/moduleTypes'
 import preprocessFileImports from '../modules/preprocessor'
 import { Chapter, Variant, type RecursivePartial } from '../types'
@@ -48,9 +47,7 @@ async function sourceRunner(
   context.variant = determineVariant(context, options)
 
   if (
-    context.chapter === Chapter.FULL_JS ||
-    context.chapter === Chapter.FULL_TS ||
-    context.chapter === Chapter.PYTHON_1
+    context.chapter === Chapter.FULL_JS
   ) {
     return runners.fulljs(program, context, theOptions)
   }
@@ -146,10 +143,9 @@ export async function sourceFilesRunner(
   context.previousPrograms.unshift(preprocessedProgram)
 
   const result = await sourceRunner(preprocessedProgram, context, verboseErrors, options)
-  const resultMapper = mapResult(context)
 
   return {
-    result: resultMapper(result),
+    result,
     verboseErrors
   }
 }

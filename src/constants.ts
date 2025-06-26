@@ -39,13 +39,3 @@ export const sourceLanguages: Language[] = [
   { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ]
-
-export const scmLanguages: Language[] = [
-  { chapter: Chapter.SCHEME_1, variant: Variant.EXPLICIT_CONTROL },
-  { chapter: Chapter.SCHEME_2, variant: Variant.EXPLICIT_CONTROL },
-  { chapter: Chapter.SCHEME_3, variant: Variant.EXPLICIT_CONTROL },
-  { chapter: Chapter.SCHEME_4, variant: Variant.EXPLICIT_CONTROL },
-  { chapter: Chapter.FULL_SCHEME, variant: Variant.EXPLICIT_CONTROL }
-]
-
-export const pyLanguages: Language[] = [{ chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT }]

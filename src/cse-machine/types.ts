@@ -2,7 +2,6 @@ import * as es from 'estree'
 
 import { Environment, Node } from '../types'
 import Closure from './closure'
-import { SchemeControlItems } from './scheme-macros'
 import { Transformers } from './interpreter'
 
 export enum InstrType {
@@ -93,7 +92,7 @@ export type Instr =
   | ArrLitInstr
   | SpreadInstr
 
-export type ControlItem = (Node | Instr | SchemeControlItems) & {
+export type ControlItem = (Node | Instr) & {
   isEnvDependent?: boolean
 }
 

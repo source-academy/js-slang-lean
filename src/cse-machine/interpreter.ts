@@ -21,7 +21,6 @@ import { evaluateBinaryExpression, evaluateUnaryExpression } from '../utils/oper
 import * as rttc from '../utils/rttc'
 import * as seq from '../utils/statementSeqTransform'
 import { checkProgramForUndefinedVariables } from '../validator/validator'
-import { isSchemeLanguage } from '../alt-langs/mapper'
 import Closure from './closure'
 import {
   Continuation,
@@ -81,9 +80,6 @@ import {
   setVariable,
   valueProducing
 } from './utils'
-import { isApply, isEval, schemeEval } from './scheme-macros'
-import { Transformer } from './patterns'
-import { flattenList, isList } from './macro-utils'
 
 type CmdEvaluator = (
   command: ControlItem,
@@ -441,7 +437,7 @@ export function* generateCSEMachineStateStream(
       cmdEvaluators[command.instrType](command, context, control, stash, isPrelude)
     } else {
       // this is a scheme value
-      schemeEval(command, context, control, stash, isPrelude)
+      throw new Error("scheme removed")
     }
 
     // Push undefined into the stack if both control and stash is empty
@@ -975,49 +971,6 @@ const cmdEvaluators: { [type: string]: CmdEvaluator } = {
       handleRuntimeError(context, new errors.CallingNonFunctionValue(func, command.srcNode))
     }
 
-    if (isApply(func)) {
-      // Check for number of arguments mismatch error
-      checkNumberOfArguments(context, func, args, command.srcNode)
-
-      // get the procedure from the arguments
-      const proc = args[0]
-      // get the last list from the arguments
-      // (and it should be a list)
-      const last = args[args.length - 1]
-      if (!isList(last)) {
-        handleRuntimeError(
-          context,
-          new errors.ExceptionError(new Error('Last argument of apply must be a list'))
-        )
-      }
-      // get the rest of the arguments between the procedure and the last list
-      const rest = args.slice(1, args.length - 1)
-      // convert the last list to an array
-      const lastAsArray = flattenList(last)
-      // combine the rest and the last list
-      const combined = [...rest, ...lastAsArray]
-
-      // push the items back onto the stash
-      stash.push(proc)
-      stash.push(...combined)
-
-      // prepare a function call for the procedure
-      control.push(instr.appInstr(combined.length, command.srcNode))
-      return
-    }
-
-    if (isEval(func)) {
-      // Check for number of arguments mismatch error
-      checkNumberOfArguments(context, func, args, command.srcNode)
-
-      // get the AST from the arguments
-      const AST = args[0]
-
-      // move it to the control
-      control.push(AST)
-      return
-    }
-
     if (isCallWithCurrentContinuation(func)) {
       // Check for number of arguments mismatch error
       checkNumberOfArguments(context, func, args, command.srcNode)
@@ -1097,8 +1050,7 @@ const cmdEvaluators: { [type: string]: CmdEvaluator } = {
       if (
         (next &&
           !(isInstr(next) && next.instrType === InstrType.ENVIRONMENT) &&
-          !control.canAvoidEnvInstr()) ||
-        isSchemeLanguage(context)
+          !control.canAvoidEnvInstr())
       ) {
         control.push(
           instr.envInstr(currentEnvironment(context), currentTransformers(context), command.srcNode)
