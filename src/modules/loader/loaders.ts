@@ -118,10 +118,7 @@ export const memoizedGetModuleDocsAsync = getMemoizedDocsImporter()
   webpack so that webpack doesn't try to compile them away.
 */
 const bundleAndTabImporter = wrapImporter<{ default: ModuleBundle }>(
-  typeof window !== 'undefined' && process.env.NODE_ENV !== 'test'
-    ? (new Function('path', 'return import(`${path}?q=${Date.now()}`)') as any)
-    : // eslint-disable-next-line @typescript-eslint/no-require-imports
-      p => Promise.resolve(require(p))
+  new Function('path', 'return import(`${path}?q=${Date.now()}`)') as any
 )
 
 export async function loadModuleBundleAsync(

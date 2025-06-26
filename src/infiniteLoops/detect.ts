@@ -1,14 +1,13 @@
 import { generate } from 'astring'
 import * as es from 'estree'
+// @ts-expect-error
+import runAltErgo from '@joeychenofficial/alt-ergo-modified'
 
 import { simple } from '../utils/walkers'
 import { InfiniteLoopError, InfiniteLoopErrorType } from './errors'
 import { getOriginalName } from './instrument'
 import * as st from './state'
 import { shallowConcretize } from './symbolic'
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const runAltErgo: any = require('@joeychenofficial/alt-ergo-modified')
 
 const options = {
   answers_with_loc: false,
