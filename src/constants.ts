@@ -9,7 +9,8 @@ export const ACORN_PARSE_OPTIONS: AcornOptions = { ecmaVersion: DEFAULT_ECMA_VER
 export const REQUIRE_PROVIDER_ID = 'requireProvider'
 export const CUT = 'cut' // cut operator for Source 4.3
 export const TRY_AGAIN = 'retry' // command for Source 4.3
-export const GLOBAL = typeof window === 'undefined' ? global : window
+export const GLOBAL =
+  typeof window === 'undefined' ? (typeof global === 'undefined' ? {} : global) : window
 export const NATIVE_STORAGE_ID = 'nativeStorage'
 export const MAX_LIST_DISPLAY_LENGTH = 100
 export const UNKNOWN_LOCATION: es.SourceLocation = {
