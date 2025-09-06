@@ -6,13 +6,13 @@ import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 
-export default {
+export default [1,2,3,4].map(n => ({
     plugins: [alias({ entries: [{ find: "path", replacement: "path-browserify" }] }), nodeResolve(), commonjs(), typescript(), json(), nodePolyfills()],
-    input: "src/evaluator.ts",
+    input: `src/evaluator${n}.ts`,
     output: {
         plugins: [terser()],
         dir: "dist",
         format: "iife",
         sourcemap: true,
     }
-}
+}));
